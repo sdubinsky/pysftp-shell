@@ -21,8 +21,7 @@ class FTPBackend(object):
                     ret = fn(params)
                 else:
                     ret = fn()
-                if ret:
-                    print ret
+                return ret
             else:
                 raise Exception("Error: {} is not a valid function".format(command))
         except Exception as e:
