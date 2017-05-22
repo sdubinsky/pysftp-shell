@@ -9,11 +9,12 @@ from ftp_backend import FTPBackend
 history = InMemoryHistory()
 hostname = None
 hostname = sys.argv[1]
-if len(sys.argv) >= 3:
-    username = sys.argv[2]
+if "@" in hostname:
+    username, hostname = hostname.split("@")
 
 password = prompt('password: ', is_password=True)
 username = username or None
+print "{}@{} -p {}".format(username, hostname, password)
 connection = FTPBackend(hostname, username, password)
 
 while True:
