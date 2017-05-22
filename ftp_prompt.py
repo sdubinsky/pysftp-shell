@@ -5,21 +5,26 @@ from prompt_toolkit import prompt
 from prompt_toolkit.history import InMemoryHistory
 from prompt_toolkit.contrib.completers import WordCompleter
 from ftp_backend import FTPBackend
-
+import pdb
 history = InMemoryHistory()
-hostname = None
+hostname = username = None
 hostname = sys.argv[1]
 if "@" in hostname:
     username, hostname = hostname.split("@")
 
 password = prompt('password: ', is_password=True)
 username = username or None
-print "{}@{} -p {}".format(username, hostname, password)
 connection = FTPBackend(hostname, username, password)
 
 while True:
+    ret = ''
     completer = WordCompleter(connection.parse('listdir'))
-    text = prompt('ftp$ ', history=history, completer = completer, complete_while_typing=False)
+    if username:
+        prmt = '{}@'.format(username)
+    else:
+        prmt = ''
+    prmt += '{}:{}$ '.format(hostname, connection.parse('pwd'))
+    text = prompt(prmt, history=history, completer = completer, complete_while_typing=False)
     ret = connection.parse(text)
     if ret:
         print ret
