@@ -15,8 +15,7 @@ class FTPBackend(object):
             fn = getattr(self.connection, command, None)
             if fn:
                 if isinstance(fn, basestring):
-                    print fn
-                    return
+                    return fn
                 if params:
                     ret = fn(params)
                 else:
